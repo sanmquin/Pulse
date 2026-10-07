@@ -1,31 +1,40 @@
-# YouTube Long-Form Videos Analytics Notebook
+# YouTube Channel Analytics & Comments Extractor Notebooks
 
-This repository contains a Google Colab notebook (`youtube_channel_analytics.ipynb`) that retrieves titles, metrics, and metadata for the last **50 long-form videos** of a specified YouTube channel, saves the data to **Google Drive** in CSV and JSON formats, and produces visual analytical charts.
+This repository contains two Google Colab notebooks for analyzing YouTube channels and extracting video top comments using the **YouTube Data API v3** and saving results directly to **Google Drive**.
+
+---
+
+## 📓 Notebooks Included
+
+### 1. `youtube_channel_analytics.ipynb`
+Retrieves titles, metrics, and metadata for the last **50 long-form videos** of a specified channel, exports CSV/JSON files to Google Drive, and generates performance charts.
+
+### 2. `youtube_video_comments.ipynb` *(New)*
+Extracts top relevant/liked comments for the **10 most recent long-form videos** from the channel, leveraging **Google Drive caching** to avoid unnecessary API quota usage, and produces visual comment analytics.
 
 ---
 
 ## 🌟 Key Features
 
-1. **API Quota Efficient**: Avoids expensive `search.list` endpoints (100 units quota per call). Instead, it uses `channels.list` (1 unit), `playlistItems.list` (1 unit per 50 videos), and `videos.list` (1 unit per 50 videos).
-2. **Shorts Exclusion via Playlist ID & Duration**:
+1. **API Quota Efficient**: Avoids expensive `search.list` endpoints (100 units quota per call). Instead, it uses `channels.list` (1 unit), `playlistItems.list` (1 unit per 50 videos), `videos.list` (1 unit per 50 videos), and `commentThreads.list` with `order="relevance"`.
+2. **Google Drive Caching & Reuse**:
+   - `youtube_video_comments.ipynb` automatically checks Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`) for cached video metadata or comment datasets before querying YouTube API endpoints.
+3. **Shorts Exclusion via Playlist ID & Duration**:
    - Accesses YouTube's long-form uploads playlist by substituting the channel ID prefix `UC...` / `UU...` with `UULF...`.
    - Parses video ISO 8601 durations (`contentDetails.duration`) and filters out any video $\le$ 60 seconds to ensure strict long-form isolation.
-3. **Google Drive Persistence**:
+4. **Google Drive Persistence**:
    - Mounts Google Drive (`google.colab.drive`) directly within Google Colab.
    - Saves formatted `.csv` and structured `.json` data files into `/content/drive/MyDrive/YouTube_Analytics/`.
-4. **Comprehensive Data Visualizations**:
-   - **Chart 1**: Top 10 Most Viewed Videos (Horizontal Bar Chart)
-   - **Chart 2**: Views Over Time / Upload Timeline (Line Chart)
-   - **Chart 3**: Video Duration vs. View Count & Engagement (Scatter Plot)
-   - **Chart 4**: Engagement Rate % Distribution across top videos
-   - **Chart 5**: Upload Frequency by Day of Week
+5. **Comprehensive Visual Analytics**:
+   - **Video Analytics**: Top viewed videos, view timeline, duration vs. view count, engagement rate distribution, upload frequency by day.
+   - **Comment Analytics**: Top 10 most liked comments across videos, top comments collected per video, character length distribution, and likes vs. reply count scatter plot.
 
 ---
 
 ## 🚀 How to Run in Google Colab
 
 1. **Open Google Colab**:
-   - Upload `youtube_channel_analytics.ipynb` directly to [Google Colab](https://colab.research.google.com/).
+   - Upload either notebook (`youtube_channel_analytics.ipynb` or `youtube_video_comments.ipynb`) directly to [Google Colab](https://colab.research.google.com/).
 
 2. **Obtain YouTube Data API Key**:
    - Go to [Google Cloud Console](https://console.cloud.google.com/).
@@ -39,10 +48,12 @@ This repository contains a Google Colab notebook (`youtube_channel_analytics.ipy
      ```python
      CONFIG = {
          "YOUTUBE_API_KEY": "YOUR_YOUTUBE_API_KEY_HERE",
-         "CHANNEL_IDENTIFIER": "@MKBHD",
-         "TARGET_VIDEO_COUNT": 50,
+         "CHANNEL_IDENTIFIER": "@josemillanastrologohumanista",
+         "TARGET_VIDEO_COUNT": 10,
+         "MAX_COMMENTS_PER_VIDEO": 50,
          "DRIVE_OUTPUT_DIR": "/content/drive/MyDrive/YouTube_Analytics",
-         "MOUNT_DRIVE": True
+         "MOUNT_DRIVE": True,
+         "USE_CACHE": True
      }
      ```
 
@@ -54,15 +65,21 @@ This repository contains a Google Colab notebook (`youtube_channel_analytics.ipy
 
 ## 📊 Output Files
 
-The notebook automatically exports:
+The notebooks automatically export datasets into Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`):
+
+### Channel Video Analytics Output:
 - `{Channel_Name}_last_50_longform_videos.csv`
 - `{Channel_Name}_last_50_longform_videos.json`
 
-### Dataset Attributes Collected:
-- `video_id` & `url`
-- `title`
-- `published_at` & `publish_date` & `publish_day_of_week` & `publish_hour_utc`
-- `duration_iso`, `duration_seconds`, `duration_formatted`
-- `view_count`, `like_count`, `comment_count`
-- `likes_per_1k_views`, `comments_per_1k_views`, `engagement_rate_%`
-- `thumbnail_url`
+### Top Comments Extractor Output:
+- `{Channel_Name}_top_comments_10_recent_videos.csv`
+- `{Channel_Name}_top_comments_10_recent_videos.json`
+
+### Collected Comment Dataset Attributes:
+- `video_id` & `video_title` & `video_publish_date`
+- `comment_id`
+- `author_name` & `author_channel_url` & `author_profile_image`
+- `comment_text` (HTML/Formatted) & `comment_text_clean` (Plain Text)
+- `like_count` & `reply_count`
+- `published_at` & `updated_at` & `comment_date`
+- `char_length` & `word_count`
