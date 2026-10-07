@@ -1,6 +1,6 @@
-# YouTube Channel Analytics & Comments Extractor Notebooks
+# YouTube Channel Analytics & Market Research Notebooks
 
-This repository contains two Google Colab notebooks for analyzing YouTube channels and extracting video top comments using the **YouTube Data API v3** and saving results directly to **Google Drive**.
+This repository contains Google Colab notebooks for analyzing YouTube channels, extracting video top comments using the **YouTube Data API v3**, and synthesizing market research reports via **Gemini 3.1 Flash-Lite**, saving results directly to **Google Drive**.
 
 ---
 
@@ -9,25 +9,33 @@ This repository contains two Google Colab notebooks for analyzing YouTube channe
 ### 1. `youtube_channel_analytics.ipynb`
 Retrieves titles, metrics, and metadata for the last **50 long-form videos** of a specified channel, exports CSV/JSON files to Google Drive, and generates performance charts.
 
-### 2. `youtube_video_comments.ipynb` *(New)*
+### 2. `youtube_video_comments.ipynb`
 Extracts top relevant/liked comments for the **10 most recent long-form videos** from the channel, leveraging **Google Drive caching** to avoid unnecessary API quota usage, and produces visual comment analytics.
+
+### 3. `youtube_comment_llm_summaries.ipynb` *(New)*
+Synthesizes market research insights from the exported video comments using **Gemini 3.1 Flash-Lite** (`gemini-3.1-flash-lite`) via `google-genai` SDK. Outputs structured Markdown and JSON market research reports locally and directly to **Google Drive** with persistent generation caching and 3-attempt exponential backoff retry logic.
 
 ---
 
 ## 🌟 Key Features
 
 1. **API Quota Efficient**: Avoids expensive `search.list` endpoints (100 units quota per call). Instead, it uses `channels.list` (1 unit), `playlistItems.list` (1 unit per 50 videos), `videos.list` (1 unit per 50 videos), and `commentThreads.list` with `order="relevance"`.
-2. **Google Drive Caching & Reuse**:
-   - `youtube_video_comments.ipynb` automatically checks Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`) for cached video metadata or comment datasets before querying YouTube API endpoints.
-3. **Shorts Exclusion via Playlist ID & Duration**:
+2. **LLM Qualitative Market Research Synthesis**:
+   - Leverages **Gemini 3.1 Flash-Lite** (`gemini-3.1-flash-lite`) via `google-genai` SDK for audience sentiment extraction, customer pain point detection, content requests, and executive channel strategy synthesis.
+   - Implements persistent generation caching (`llm_generation_cache.json`) to avoid re-querying Gemini API when re-running notebooks.
+   - Robust retry mechanics (up to 3 retries with exponential backoff) with explicit error handling.
+3. **Google Drive Caching & Reuse**:
+   - `youtube_video_comments.ipynb` and `youtube_comment_llm_summaries.ipynb` automatically check Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`) for cached datasets before executing requests.
+4. **Shorts Exclusion via Playlist ID & Duration**:
    - Accesses YouTube's long-form uploads playlist by substituting the channel ID prefix `UC...` / `UU...` with `UULF...`.
    - Parses video ISO 8601 durations (`contentDetails.duration`) and filters out any video $\le$ 60 seconds to ensure strict long-form isolation.
-4. **Google Drive Persistence**:
+5. **Google Drive Persistence**:
    - Mounts Google Drive (`google.colab.drive`) directly within Google Colab.
-   - Saves formatted `.csv` and structured `.json` data files into `/content/drive/MyDrive/YouTube_Analytics/`.
-5. **Comprehensive Visual Analytics**:
+   - Saves formatted `.csv`, `.json`, and `.md` data files into `/content/drive/MyDrive/YouTube_Analytics/`.
+6. **Comprehensive Visual Analytics**:
    - **Video Analytics**: Top viewed videos, view timeline, duration vs. view count, engagement rate distribution, upload frequency by day.
    - **Comment Analytics**: Top 10 most liked comments across videos, top comments collected per video, character length distribution, and likes vs. reply count scatter plot.
+   - **LLM Synthesis Analytics**: Comment sample volume per video, comment character distributions, and LLM synthesis status.
 
 ---
 
@@ -74,6 +82,10 @@ The notebooks automatically export datasets into Google Drive (`/content/drive/M
 ### Top Comments Extractor Output:
 - `{Channel_Name}_top_comments_10_recent_videos.csv`
 - `{Channel_Name}_top_comments_10_recent_videos.json`
+
+### Market Research LLM Summaries Output:
+- `{Channel_Name}_market_research_summary.md`
+- `{Channel_Name}_market_research_summary.json`
 
 ### Collected Comment Dataset Attributes:
 - `video_id` & `video_title` & `video_publish_date`
