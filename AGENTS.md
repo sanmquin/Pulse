@@ -61,5 +61,5 @@ All Jupyter Notebooks created or modified in this repository must strictly adher
   - Implement a retry loop attempting LLM requests up to **a maximum of 3 times** upon API or network failure (with exponential backoff, e.g. `time.sleep(2 * attempt)`).
   - Do **NOT** populate outputs with synthetic or placeholder text if an LLM request fails. Instead, throw an explicit exception (e.g., `RuntimeError`) detailing the failure after exhausting all retries.
 * **Persistent Generation Caching:**
-  - When labeling a dataset, maintain a persistent disk cache (e.g., `llm_generation_cache.json`) exported across primary Google Drive (`/content/drive/MyDrive/persuade_data`) and local fallback directories (`data/`, `analysis/`).
+  - When labeling a dataset, maintain a persistent disk cache (e.g., `llm_generation_cache.json`) exported across primary Google Drive (`/content/drive/MyDrive/persuade_data`) and local fallback directories (`data/`, `analysis/`). Important: each notebook has its own cache!
   - Provide an optional configuration to check the cache prior to invoking the LLM API so that if notebook execution is interrupted and resumed, previous LLM generations are restored without re-querying the API.
