@@ -46,13 +46,22 @@ All notebooks in this repository execute with an adaptive storage hierarchy:
   - Contains textual vector embeddings and 8-cluster K-Means assignments.
   - Contains initial sequential LLM cluster descriptions (sorted largest to smallest by channel count, with prior descriptions passed as context) and the final holistic LLM refined conceptual clusters (including top 3 performing videos per channel).
 
-### 6. Channel Relevance Filtering & Selection (`5.Youtube_channel_relevance_filtering.ipynb`) *(New)*
+### 6. Channel Relevance Filtering & Selection (`5.Youtube_channel_relevance_filtering.ipynb`)
 - **Top 10 Relevant Channels CSV**: `{Channel_Name}_top_10_relevant_channels.csv`
 - **Top 10 Relevant Channels JSON**: `{Channel_Name}_top_10_relevant_channels.json`
 - **Top 10 Relevant Channels Markdown**: `{Channel_Name}_top_10_relevant_channels.md`
 - **Description**:
   - Contains the top 10 most relevant YouTube channels filtered through iterative LLM batch reduction ($10 \to 5$, shuffle until $\le 25$, final selection of top 10) based on target channel thematic guidelines (`context/channel_description.txt`).
   - Includes qualitative relevance scores, thematic alignment tags, detailed justifications, and top video sample titles per selected channel.
+
+### 7. Similar Channels Top Comments & Aggregated Subscriptions (`6.Youtube_similar_channels_comments_and_subscriptions.ipynb`) *(New)*
+- **Similar Channels Comments CSV**: `{Channel_Name}_similar_channels_top_comments.csv`
+- **Similar Channels Comments JSON**: `{Channel_Name}_similar_channels_top_comments.json`
+- **Similar Channels Subscriptions CSV**: `{Channel_Name}_similar_channels_aggregated_subscriptions.csv`
+- **Similar Channels Subscriptions JSON**: `{Channel_Name}_similar_channels_aggregated_subscriptions.json`
+- **Description**:
+  - Top 50 comments per video retrieved across recent long-form videos of the top similar channels exported by Notebook 5.
+  - Aggregated cross-channel subscriptions ($f(s) = \sum_{a} \mathbb{I}(s \in S(a))$) mined from comment authors across similar channels.
 
 ---
 
