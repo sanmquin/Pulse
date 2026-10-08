@@ -18,13 +18,21 @@ Extracts unique comment authors from exported video comments, queries their publ
 ### 4. `2.Youtube_comment_llm_summaries.ipynb`
 Synthesizes market research insights from the exported video comments using **Gemini 3.1 Flash-Lite** (`gemini-3.1-flash-lite`) via `google-genai` SDK. Outputs structured Markdown and JSON market research reports locally and directly to **Google Drive** with persistent generation caching and 3-attempt exponential backoff retry logic.
 
-### 5. `4.Youtube_channel_subscription_clusters.ipynb` *(New)*
+### 5. `4.Youtube_channel_subscription_clusters.ipynb`
 Segments cross-channel audience subscriptions into meaningful media consumption clusters:
 - Imports comment author subscriptions and filters for channels with at least more than one occurrence.
 - Queries YouTube Data API v3 (`playlistItems.list` on long-form `UULF` playlist IDs) to fetch up to **50 recent long-form videos** (>60s) per channel and exports the combined dataset to Google Drive.
 - Generates textual embeddings over channel video titles, averages embeddings per channel, and partitions channels into **8 clusters** via K-Means.
 - Generates sequential LLM cluster descriptions (sorted largest to smallest by channel count, including Title, Short Description, Lengthy Explanation with examples, and Top 10 performing videos per channel), passing prior cluster descriptions as context to prevent generic overlap.
 - Performs a final LLM request to synthesize refined conceptual clusters beyond numerical ones, exporting formatted Markdown and JSON reports locally and to Google Drive.
+
+### 6. `5.Youtube_channel_relevance_filtering.ipynb` *(New)*
+Filters and ranks the **Top 10 most relevant channels** from cross-channel audience subscriptions using Gemini 3.1 Flash-Lite:
+- Imports video titles for exported subscribed channels and isolates the top 10 best performing (or recent) videos per channel.
+- Ingests reference channel description guidelines (`context/channel_description.txt`).
+- Partitions candidate channels into batches of 10 and executes iterative LLM filtering ($10 \to 5$, shuffle survivors, repeat until $\le 25$).
+- Performs a final LLM selection over the candidate pool of $\le 25$ to extract and rank the Top 10 channels with qualitative relevance scores and justifications.
+- Exports CSV, JSON, and Markdown summary reports to local disk and Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`).
 
 ---
 
@@ -103,3 +111,8 @@ The notebooks automatically export datasets into Google Drive (`/content/drive/M
 - `{Channel_Name}_subscribed_channels_recent_videos.json`
 - `{Channel_Name}_refined_subscription_clusters.md`
 - `{Channel_Name}_refined_subscription_clusters.json`
+
+### Channel Relevance Filtering Output:
+- `{Channel_Name}_top_10_relevant_channels.csv`
+- `{Channel_Name}_top_10_relevant_channels.json`
+- `{Channel_Name}_top_10_relevant_channels.md`

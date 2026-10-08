@@ -30,3 +30,19 @@
   - Subscribed Channel Recent Videos: `{Channel_Name}_subscribed_channels_recent_videos.csv` & `.json`
   - Refined Cluster Summary Report: `{Channel_Name}_refined_subscription_clusters.md` & `.json`
 - **Quantitative Metrics & Reporting**: Reports total channels filtered, total recent long-form videos collected, cluster size distributions, and 2D PCA embedding projections.
+
+### Module 6: Iterative LLM Batch Relevance Filtering & Top 10 Channel Selection (`5.Youtube_channel_relevance_filtering.ipynb`)
+- **Objective**: Qualitative filtering and ranking pipeline using Gemini 3.1 Flash-Lite to select the 10 most relevant channels from cross-channel audience subscriptions based on target channel guidelines (`context/channel_description.txt`).
+- **Input Dependencies**: Subscribed channel videos dataset (`{Channel_Name}_subscribed_channels_recent_videos.json` or `.csv`) exported by Module 5 in `/content/drive/MyDrive/YouTube_Analytics/` or local fallback paths (`data/`, `analysis/`, `.`).
+- **Methodology & Mathematical Formulation**:
+  1. *Top Video Isolation*: For each subscribed channel $c_i$, extracts its top 10 best performing videos (ranked by view count / engagement) or recent uploads $V^*(c_i)$.
+  2. *Reference Context Ingestion*: Reads target channel mission and thematic focus from `context/channel_description.txt`.
+  3. *Iterative LLM Batch Reduction*: Partitions channels into batches of 10 ($B=10$). Invokes `gemini-3.1-flash-lite` to select the 5 most relevant channels per batch:
+     $$\mathcal{F}_{\text{LLM}}(B_j^{(t)}, D_{\text{target}}) \to S_j^{(t)}, \quad |S_j^{(t)}| = 5$$
+     Shuffles survivors randomly after each round to prevent position bias until the candidate pool is reduced to $M_{\text{final}} \le 25$.
+  4. *Final Top 10 Selection & Ranking*: Evaluates the $\le 25$ surviving pool holistically, ranking the Top 10 channels with qualitative relevance scores ($0-100$), thematic alignment classifications, detailed justifications, and top video sample titles.
+- **Exported Datasets**:
+  - Top 10 Relevant Channels CSV: `{Channel_Name}_top_10_relevant_channels.csv`
+  - Top 10 Relevant Channels JSON: `{Channel_Name}_top_10_relevant_channels.json`
+  - Top 10 Relevant Channels Markdown Report: `{Channel_Name}_top_10_relevant_channels.md`
+- **Quantitative Metrics & Reporting**: Tracks survival pool size trajectories across filtering rounds and visualizes top 10 channel relevance score distributions.
