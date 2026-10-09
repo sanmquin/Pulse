@@ -46,13 +46,21 @@ All notebooks in this repository execute with an adaptive storage hierarchy:
   - Contains textual vector embeddings and 8-cluster K-Means assignments.
   - Contains initial sequential LLM cluster descriptions (sorted largest to smallest by channel count, with prior descriptions passed as context) and the final holistic LLM refined conceptual clusters (including top 3 performing videos per channel).
 
-### 6. Channel Relevance Filtering & Selection (`5.Youtube_channel_relevance_filtering.ipynb`) *(New)*
+### 6. Channel Relevance Filtering & Selection (`5.Youtube_channel_relevance_filtering.ipynb`)
 - **Top 10 Relevant Channels CSV**: `{Channel_Name}_top_10_relevant_channels.csv`
 - **Top 10 Relevant Channels JSON**: `{Channel_Name}_top_10_relevant_channels.json`
 - **Top 10 Relevant Channels Markdown**: `{Channel_Name}_top_10_relevant_channels.md`
 - **Description**:
   - Contains the top 10 most relevant YouTube channels filtered through iterative LLM batch reduction ($10 \to 5$, shuffle until $\le 25$, final selection of top 10) based on target channel thematic guidelines (`context/channel_description.txt`).
   - Includes qualitative relevance scores, thematic alignment tags, detailed justifications, and top video sample titles per selected channel.
+
+### 7. Competitive Market Intelligence & Performance Benchmarking (`6.Youtube_competitive_market_analysis.ipynb`) *(New)*
+- **Competitive Market Analysis CSV**: `{Channel_Name}_competitive_market_analysis.csv`
+- **Competitive Market Analysis JSON**: `{Channel_Name}_competitive_market_analysis.json`
+- **Competitive Market Analysis Markdown**: `{Channel_Name}_competitive_market_analysis.md`
+- **Analytics Visualization PNG**: `{Channel_Name}_competitive_market_analysis_analytics.png`
+- **Description**:
+  - Contains per-channel content summaries, contrastive performance driver evaluations (Top 10 best-performing vs. Bottom 10 worst-performing long-form videos), view performance gap metrics ($R_{\text{gap}}$), and final global strategic guidelines for Casa Siete synthesized via Gemini 3.1 Flash-Lite (`gemini-3.1-flash-lite`).
 
 ---
 
