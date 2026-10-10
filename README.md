@@ -26,13 +26,21 @@ Segments cross-channel audience subscriptions into meaningful media consumption 
 - Generates sequential LLM cluster descriptions (sorted largest to smallest by channel count, including Title, Short Description, Lengthy Explanation with examples, and Top 10 performing videos per channel), passing prior cluster descriptions as context to prevent generic overlap.
 - Performs a final LLM request to synthesize refined conceptual clusters beyond numerical ones, exporting formatted Markdown and JSON reports locally and to Google Drive.
 
-### 6. `5.Youtube_channel_relevance_filtering.ipynb` *(New)*
+### 6. `5.Youtube_channel_relevance_filtering.ipynb`
 Filters and ranks the **Top 10 most relevant channels** from cross-channel audience subscriptions using Gemini 3.1 Flash-Lite:
 - Imports video titles for exported subscribed channels and isolates the top 10 best performing (or recent) videos per channel.
 - Ingests reference channel description guidelines (`context/channel_description.txt`).
 - Partitions candidate channels into batches of 10 and executes iterative LLM filtering ($10 \to 5$, shuffle survivors, repeat until $\le 25$).
 - Performs a final LLM selection over the candidate pool of $\le 25$ to extract and rank the Top 10 channels with qualitative relevance scores and justifications.
 - Exports CSV, JSON, and Markdown summary reports to local disk and Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`).
+
+### 7. `6.Youtube_similar_channels_comments_and_subscriptions.ipynb` *(New)*
+Retrieves top comments and aggregated cross-channel subscriptions from the most similar channels exported in the previous notebook:
+- Ingests Top 10 relevant channels dataset exported by `5.Youtube_channel_relevance_filtering.ipynb`.
+- Fetches recent long-form videos (>60s) for similar channels and retrieves the **top 50 comments per video** via YouTube Data API v3 (`commentThreads.list` with `order="relevance"`).
+- Isolates unique comment authors and mines public subscriptions via `subscriptions.list`.
+- Aggregates channel subscription frequencies to identify common cross-channel audience subscriptions.
+- Exports separate CSV and JSON files for top comments and aggregated subscriptions to local disk and Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`).
 
 ---
 
@@ -116,3 +124,9 @@ The notebooks automatically export datasets into Google Drive (`/content/drive/M
 - `{Channel_Name}_top_10_relevant_channels.csv`
 - `{Channel_Name}_top_10_relevant_channels.json`
 - `{Channel_Name}_top_10_relevant_channels.md`
+
+### Similar Channels Comments & Aggregated Subscriptions Output:
+- `{Channel_Name}_similar_channels_top_comments.csv`
+- `{Channel_Name}_similar_channels_top_comments.json`
+- `{Channel_Name}_similar_channels_aggregated_subscriptions.csv`
+- `{Channel_Name}_similar_channels_aggregated_subscriptions.json`

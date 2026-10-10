@@ -46,3 +46,19 @@
   - Top 10 Relevant Channels JSON: `{Channel_Name}_top_10_relevant_channels.json`
   - Top 10 Relevant Channels Markdown Report: `{Channel_Name}_top_10_relevant_channels.md`
 - **Quantitative Metrics & Reporting**: Tracks survival pool size trajectories across filtering rounds and visualizes top 10 channel relevance score distributions.
+
+### Module 7: Similar Channels Top Comments & Aggregated Subscriptions Mining (`6.Youtube_similar_channels_comments_and_subscriptions.ipynb`)
+- **Objective**: Harvest top comments and mine public subscriptions across the top similar channels exported in the previous notebook (`5.Youtube_channel_relevance_filtering.ipynb`).
+- **Input Dependencies**: Top 10 Relevant Channels dataset (`{Channel_Name}_top_10_relevant_channels.json` or `.csv`) exported by Module 6 in `/content/drive/MyDrive/YouTube_Analytics/` or local fallback paths (`data/`, `analysis/`, `.`).
+- **Methodology & Mathematical Formulation**:
+  1. *Similar Channel Ingestion*: Loads candidate similar channels $C_{\text{sim}} = \{c_1, c_2, \dots, c_K\}$ where $K \le 10$.
+  2. *Long-Form Video Isolation*: For each channel $c_k$, queries `playlistItems.list` on `UULF` playlist IDs to isolate recent videos $V(c_k)$ with ISO 8601 duration $> 60$ seconds.
+  3. *Top Comments Harvesting*: For each video $v \in V(c_k)$, fetches top $M=50$ comments ordered by relevance:
+     $$\mathcal{D}_{\text{comments}} = \bigcup_{k=1}^{K} \bigcup_{v \in V(c_k)} \text{TopComments}(v, M)$$
+  4. *Comment Author Subscription Graph Mining*: Isolates unique comment authors $A = \{a_1, a_2, \dots, a_N\}$ and queries public subscriptions $S(a)$ via `subscriptions.list`. Handles private setting 403 errors gracefully.
+  5. *Cross-Channel Subscription Frequency Aggregation*: Computes subscription overlap frequency across public authors $A_{\text{public}}$:
+     $$f(s) = \sum_{a \in A_{\text{public}}} \mathbb{I}(s \in S(a))$$
+- **Exported Datasets**:
+  - Similar Channels Top Comments: `{Channel_Name}_similar_channels_top_comments.csv` & `.json`
+  - Aggregated Audience Subscriptions: `{Channel_Name}_similar_channels_aggregated_subscriptions.csv` & `.json`
+- **Quantitative Metrics & Reporting**: Reports total similar channels processed, total long-form videos analyzed, total top comments extracted, unique comment authors, public vs. private author counts, total subscriptions fetched, and total unique subscribed channels discovered.
