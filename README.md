@@ -131,3 +131,8 @@ The notebooks automatically export datasets into Google Drive (`/content/drive/M
 - `{Channel_Name}_competitive_market_analysis.json`
 - `{Channel_Name}_competitive_market_analysis.md`
 - `{Channel_Name}_competitive_market_analysis_analytics.png`
+### Similar Channels Comments & Aggregated Subscriptions Output:
+- `{Channel_Name}_similar_channels_top_comments.csv`
+- `{Channel_Name}_similar_channels_top_comments.json`
+- `{Channel_Name}_similar_channels_aggregated_subscriptions.csv`
+- `{Channel_Name}_similar_channels_aggregated_subscriptions.json`

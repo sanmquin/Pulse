@@ -61,6 +61,14 @@ All notebooks in this repository execute with an adaptive storage hierarchy:
 - **Analytics Visualization PNG**: `{Channel_Name}_competitive_market_analysis_analytics.png`
 - **Description**:
   - Contains per-channel content summaries, contrastive performance driver evaluations (Top 10 best-performing vs. Bottom 10 worst-performing long-form videos), view performance gap metrics ($R_{\text{gap}}$), and final global strategic guidelines for Casa Siete synthesized via Gemini 3.1 Flash-Lite (`gemini-3.1-flash-lite`).
+### 7. Similar Channels Top Comments & Aggregated Subscriptions (`6.Youtube_similar_channels_comments_and_subscriptions.ipynb`) *(New)*
+- **Similar Channels Comments CSV**: `{Channel_Name}_similar_channels_top_comments.csv`
+- **Similar Channels Comments JSON**: `{Channel_Name}_similar_channels_top_comments.json`
+- **Similar Channels Subscriptions CSV**: `{Channel_Name}_similar_channels_aggregated_subscriptions.csv`
+- **Similar Channels Subscriptions JSON**: `{Channel_Name}_similar_channels_aggregated_subscriptions.json`
+- **Description**:
+  - Top 50 comments per video retrieved across recent long-form videos of the top similar channels exported by Notebook 5.
+  - Aggregated cross-channel subscriptions ($f(s) = \sum_{a} \mathbb{I}(s \in S(a))$) mined from comment authors across similar channels.
 
 ---
 
