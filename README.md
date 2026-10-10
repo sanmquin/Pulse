@@ -34,13 +34,14 @@ Filters and ranks the **Top 10 most relevant channels** from cross-channel audie
 - Performs a final LLM selection over the candidate pool of $\le 25$ to extract and rank the Top 10 channels with qualitative relevance scores and justifications.
 - Exports CSV, JSON, and Markdown summary reports to local disk and Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`).
 
-### 7. `6.Youtube_similar_channels_comments_and_subscriptions.ipynb` *(New)*
-Retrieves top comments and aggregated cross-channel subscriptions from the most similar channels exported in the previous notebook:
-- Ingests Top 10 relevant channels dataset exported by `5.Youtube_channel_relevance_filtering.ipynb`.
-- Fetches recent long-form videos (>60s) for similar channels and retrieves the **top 50 comments per video** via YouTube Data API v3 (`commentThreads.list` with `order="relevance"`).
-- Isolates unique comment authors and mines public subscriptions via `subscriptions.list`.
-- Aggregates channel subscription frequencies to identify common cross-channel audience subscriptions.
-- Exports separate CSV and JSON files for top comments and aggregated subscriptions to local disk and Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`).
+### 7. `6.Youtube_competitive_market_analysis.ipynb` *(New)*
+Executes in-depth competitive market intelligence and contrastive performance analysis across the **Top 10 similar channels**:
+- Harvests up to 50 recent long-form videos (>60s) per competitor channel and isolates Top 10 best-performing vs. Bottom 10 worst-performing videos based on view count.
+- Executes 2 LLM requests per channel using **Gemini 3.1 Flash-Lite**:
+  1. **Content Summary**: Thematic pillars, narrative tone, target audience, brand identity, and value proposition.
+  2. **Contrastive Performance Analysis**: Evaluates high-performance title/hook drivers vs underperformance traps.
+- Executes a final **Global LLM Synthesis Request** outputting strategic guidelines, core content pillars, title formulas, and roadmap for **Casa Siete** based on `context/channel_description.txt`.
+- Exports CSV, JSON, Markdown reports, and Seaborn/Matplotlib visual analytics charts to Google Drive (`/content/drive/MyDrive/YouTube_Analytics/`).
 
 ---
 
@@ -125,6 +126,11 @@ The notebooks automatically export datasets into Google Drive (`/content/drive/M
 - `{Channel_Name}_top_10_relevant_channels.json`
 - `{Channel_Name}_top_10_relevant_channels.md`
 
+### Competitive Market Analysis Output:
+- `{Channel_Name}_competitive_market_analysis.csv`
+- `{Channel_Name}_competitive_market_analysis.json`
+- `{Channel_Name}_competitive_market_analysis.md`
+- `{Channel_Name}_competitive_market_analysis_analytics.png`
 ### Similar Channels Comments & Aggregated Subscriptions Output:
 - `{Channel_Name}_similar_channels_top_comments.csv`
 - `{Channel_Name}_similar_channels_top_comments.json`

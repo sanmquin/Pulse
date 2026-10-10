@@ -47,6 +47,24 @@
   - Top 10 Relevant Channels Markdown Report: `{Channel_Name}_top_10_relevant_channels.md`
 - **Quantitative Metrics & Reporting**: Tracks survival pool size trajectories across filtering rounds and visualizes top 10 channel relevance score distributions.
 
+### Module 7: Competitive Market Intelligence & Contrastive Performance Analysis (`6.Youtube_competitive_market_analysis.ipynb`)
+- **Objective**: In-depth competitive market intelligence and contrastive performance benchmarking across the 10 most similar channels exported in Module 6 using Gemini 3.1 Flash-Lite (`gemini-3.1-flash-lite`).
+- **Input Dependencies**: Top 10 relevant channels dataset (`{Channel_Name}_top_10_relevant_channels.json` / `.csv`) exported by Module 6 and long-form video datasets in `/content/drive/MyDrive/YouTube_Analytics/` or local fallback paths (`data/`, `analysis/`, `.`).
+- **Methodology & Mathematical Formulation**:
+  1. *Video Dataset Harvesting & Partitioning*: Fetches up to 50 recent long-form videos ($>60$ seconds) per channel ($N_i \le 50$). Sorts videos by view count to isolate the Top 10 best-performing set $V_{\text{top10}}(c_i)$ and Bottom 10 worst-performing set $V_{\text{bottom10}}(c_i)$.
+  2. *Performance Gap Ratio Calculation*: Computes the viewership performance gap ratio across tiers:
+     $$R_{\text{gap}}(c_i) = \frac{\bar{V}_{\text{top10}}(c_i)}{\bar{V}_{\text{bottom10}}(c_i) + 1}, \quad \bar{V}(S) = \frac{1}{|S|} \sum_{v \in S} \text{Views}(v)$$
+  3. *Dual-LLM Per-Channel Evaluation*:
+     - **Request 1 (Content Summary)**: Synthesizes core thematic pillars, narrative tone, target audience, brand identity, and value proposition ($\mathcal{F}_{\text{LLM}}^{\text{Summary}}(c_i)$).
+     - **Request 2 (Contrastive Performance Analysis)**: Evaluates high-performance driver factors (winning themes, title patterns, curiosity/relational hooks) in $V_{\text{top10}}(c_i)$ versus underperformance weaknesses in $V_{\text{bottom10}}(c_i)$ ($\mathcal{F}_{\text{LLM}}^{\text{Contrastive}}$).
+  4. *Global LLM Strategic Guidelines Request*: Evaluates all competitor findings against Casa Siete's mission (`context/channel_description.txt`) to produce actionable content pillars, title/hook formulas, underperformance pitfalls to avoid, and growth roadmap ($\mathcal{F}_{\text{LLM}}^{\text{Global}}$).
+- **Exported Datasets**:
+  - Competitive Analysis CSV: `{Channel_Name}_competitive_market_analysis.csv`
+  - Competitive Analysis JSON: `{Channel_Name}_competitive_market_analysis.json`
+  - Competitive Market Analysis Markdown Report: `{Channel_Name}_competitive_market_analysis.md`
+  - Analytics Chart PNG: `{Channel_Name}_competitive_market_analysis_analytics.png`
+- **Quantitative Metrics & Reporting**: Reports average views top 10 vs bottom 10, performance gap ratios ($R_{\text{gap}}$), total long-form videos analyzed per channel, and dual visual analytics charts.
+
 ### Module 7: Similar Channels Top Comments & Aggregated Subscriptions Mining (`6.Youtube_similar_channels_comments_and_subscriptions.ipynb`)
 - **Objective**: Harvest top comments and mine public subscriptions across the top similar channels exported in the previous notebook (`5.Youtube_channel_relevance_filtering.ipynb`).
 - **Input Dependencies**: Top 10 Relevant Channels dataset (`{Channel_Name}_top_10_relevant_channels.json` or `.csv`) exported by Module 6 in `/content/drive/MyDrive/YouTube_Analytics/` or local fallback paths (`data/`, `analysis/`, `.`).
